@@ -60,3 +60,11 @@ export const moveEmailsToBin = async (request, response) => {
         response.status(500).json(error.message);   
     }
 }
+
+export const getRoute = async (request, response) => {
+    try{
+        response.send("Server is  Running.......")
+    }catch(error){
+
+    }
+}
