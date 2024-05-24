@@ -6,7 +6,7 @@ const mongoose= require("mongoose")
 
 // const USERNAME = process.env.DB_USERNAME;
 // const PASSWORD = process.env.DB_PASSWORD; 
-
+mongoose.set("strictQuery", false);
 const Connection = () => {
     const DB_URI = `mongodb+srv://kirankumarnaga7:Nkiran07@cluster0.ata8crg.mongodb.net/?retryWrites=true&w=majority`;
     try {
