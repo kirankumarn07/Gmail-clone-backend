@@ -1,6 +1,7 @@
-import mongoose from 'mongoose';
+const mongoose = require("mongoose");
 
-const EmailSchema = mongoose.Schema({
+
+const EmailSchema =new mongoose.Schema({
     to: {
         type: String,
         required: true
@@ -9,16 +10,24 @@ const EmailSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    subject: String,
-    body: String,
+    subject: {
+        type: String,
+        required: true
+    },
+    body: {
+        type: String,
+        required: true
+    },
     date: {
         type: Date,
-        required: true
+        default: Date.now
     },
     image: String,
     name: {
         type: String,
-        required: true
+        required: true,
+        default:"0"
+
     },
     starred: {
         type: Boolean,
@@ -33,9 +42,11 @@ const EmailSchema = mongoose.Schema({
     type: {
         type: String,
         required: true,
+        default: false
+
+
     }
-})
+});
+const Email = mongoose.model("Email", EmailSchema);
 
-const email = mongoose.model('emails', EmailSchema);
-
-export default email;
+exports.Email = Email;

@@ -1,4 +1,5 @@
-import Email from "../model/email.js";
+const Email =require("../model/email.js");
+import mongoose from "mongoose";
 
 export const saveSendEmails = async (request, response) => {
     try {
@@ -67,4 +68,29 @@ export const getRoute = async (request, response) => {
     }catch(error){
 
     }
+}
+
+export const loginRoute = async (req, res) => {
+    const DB_URI = `mongodb+srv://kirankumarnaga7:Nkiran07@cluster0.ata8crg.mongodb.net/?retryWrites=true&w=majority`;
+    const client = mongoose.connect(DB_URI, { useNewUrlParser: true });
+
+    try 
+    {
+        
+        const db = await client.db('Gmail_Clone')
+        let user = await db.collection('All Users').aggregate([{ $match: { username: req.params.email } }]).toArray()
+        if (user.length !== 0 || user.length !== 0) {
+            res.status(200).send({ message: "user found", data: user })
+        }
+        else {
+            res.send({ message: "user not found" })
+        }
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).send({ message: 'Internal server error', error })
+    }
+    // finally {
+    //     client.close()
+    // }
 }

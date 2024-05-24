@@ -1,7 +1,8 @@
-import mongoose from "mongoose";
-import dotenv from 'dotenv';
+// import mongoose from "mongoose";
+// import dotenv from 'dotenv';
+const mongoose= require("mongoose")
 
-dotenv.config();
+// dotenv.config();
 
 // const USERNAME = process.env.DB_USERNAME;
 // const PASSWORD = process.env.DB_PASSWORD; 
@@ -17,4 +18,4 @@ const Connection = () => {
     }
 }
 
-export default Connection;
+module.exports = Connection
