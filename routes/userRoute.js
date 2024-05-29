@@ -6,6 +6,8 @@ const jwt = require('jsonwebtoken');
 const userRouter = express.Router();
 const nodemailer=require('nodemailer');
 const { Email } = require("../model/email");
+const { getEmails } = require("../controller/email-controller");
+
 
  const transporter = nodemailer.createTransport({
     // host: "smtp.ethereal.email",
@@ -138,7 +140,8 @@ await newUser.save();
   userRouter.get("/find_emails",async(req,res)=>{
     const data=await Email.find()
     console.log(data);
-    return res.send(data)
+   const getEmail= new getEmails('sent');
+    return res.send({data,getEmail})
   })
 
 module.exports = userRouter;

@@ -1,7 +1,8 @@
-const Email =require("../model/email.js");
-import mongoose from "mongoose";
+// const Email =require("../model/email.js");
+const { Email } = require("../model/email");
+const mongoose=require("mongoose");
 
-export const saveSendEmails = async (request, response) => {
+ const saveSendEmails = async (request, response) => {
     try {
         console.log('eeeee', request.body)
         const email = await new Email(request.body);
@@ -13,30 +14,33 @@ export const saveSendEmails = async (request, response) => {
     }
 }
 
-export const getEmails = async (request, response) => {
+ const getEmails = async (request, response) => {
     try {
         let emails;
 
-        if (request.params.type === 'starred') {
-            emails = await Email.find({ starred: true, bin: false });
+        if (request.params.type  === 'starred') {
+            emails = await Email.find({ starred: true, bin: false}).sort({ date: -1 });
         } else if (request.params.type === 'bin') {
-            emails = await Email.find({ bin: true })
+            emails = await Email.find({ bin: true }).sort({ date: -1 })
         } else if (request.params.type === 'allmail') {
-            emails = await Email.find({});
+            emails = await Email.find({}).sort({ date: -1 });
         } else if (request.params.type === 'inbox') {
-            emails = await Email.find({ from : "kirankumar.naga7@gmail.com" });
-            console.log('kkkkkkk', emails)
+            emails = await Email.find({ from : "kirankumar77717@gmail.com", bin: false }).sort({ date: -1 });
+            // console.log('kkkkkkk', emails)
+            }else if (request.params.type === 'sent') {
+                emails = await Email.find({ from : "kirankumar77717@gmail.com" , bin: false}).sort({ date: -1 });
+                // console.log('kkkkkkk sent', emails)
         } else {
             emails = await Email.find({ type: request.params.type });
         }
 
-        response.status(200).json(emails);
+       return emails;
     } catch (error) {
-        response.status(500).json(error.message);
+        return response.status(500).json(error.message);
     }
 }
 
-export const toggleStarredEmail = async (request, response) => {
+ const toggleStarredEmail = async (request, response) => {
     try {   
         await Email.updateOne({ _id: request.body.id }, { $set: { starred: request.body.value }})
         response.status(201).json('Value is updated');
@@ -45,32 +49,40 @@ export const toggleStarredEmail = async (request, response) => {
     }
 }
 
-export const deleteEmails = async (request, response) => {
+ const deleteEmails = async (request, response) => {
     try {
-        await Email.deleteMany({ _id: { $in: request.body }})
+       await Email.deleteMany({ _id: { $in: request.body }})
+    //    console.log("deleteEmails");
+
+    //    console.log(request.body);
+    //    console.log("deleteEmails111255");
+
         response.status(200).json('emails deleted successfully');
     } catch (error) {
         response.status(500).json(error.message);
     }
 }
 
-export const moveEmailsToBin = async (request, response) => {
+ const moveEmailsToBin = async (request, response) => {
     try {
-        await Email.updateMany({ _id: { $in: request.body }}, { $set: { bin: true, starred: false, type: '' }});
+        await Email.updateMany({ _id: { $in: request.body }}, { $set: { bin: true }});
+        console.log("moveEmailsToBin", request.body);
+        response.status(200).json('Moved to Bin ');
+   
     } catch (error) {
         response.status(500).json(error.message);   
     }
 }
 
-export const getRoute = async (request, response) => {
+ const getRoute = async (request, response) => {
     try{
         response.send("Server is  Running.......")
     }catch(error){
-
+      
     }
 }
 
-export const loginRoute = async (req, res) => {
+ const loginRoute = async (req, res) => {
     const DB_URI = `mongodb+srv://kirankumarnaga7:Nkiran07@cluster0.ata8crg.mongodb.net/?retryWrites=true&w=majority`;
     const client = mongoose.connect(DB_URI, { useNewUrlParser: true });
 
@@ -94,3 +106,4 @@ export const loginRoute = async (req, res) => {
     //     client.close()
     // }
 }
+module.exports={saveSendEmails,getRoute,moveEmailsToBin,deleteEmails,toggleStarredEmail,getEmails}

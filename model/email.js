@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 
 
 const EmailSchema =new mongoose.Schema({
+    id: {
+        type: String,
+        required: false
+    },
     to: {
         type: String,
         required: true
@@ -43,7 +47,6 @@ const EmailSchema =new mongoose.Schema({
         type: String,
         required: true,
         default: false
-
 
     }
 });

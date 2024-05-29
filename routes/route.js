@@ -19,9 +19,11 @@
 
 const express = require("express");
 const User = require("./userRoute");
+const emailRouter = require("./sendmail")
 
 module.exports = function (app) {
   app.use(express.json());
   app.use("/api/users", User);
+  app.use("/api/email", emailRouter)
   
 };
